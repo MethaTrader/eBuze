@@ -1,0 +1,153 @@
+/* Custom styles for MEXC Account Manager */
+
+body {
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+
+.navbar-brand {
+    font-weight: 700;
+}
+
+.bg-gradient {
+    background: linear-gradient(45deg, #4e73df, #224abe) !important;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    border: none;
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+    font-weight: 600;
+}
+
+.btn {
+    border-radius: 5px;
+}
+
+.list-group-item {
+    border-left: none;
+    border-right: none;
+    padding: 12px 15px;
+}
+
+.list-group-item:first-child {
+    border-top: none;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+.form-control:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+}
+
+/* Dashboard stats cards */
+.card.bg-primary {
+    background: linear-gradient(45deg, #4e73df, #224abe) !important;
+}
+
+.card.bg-success {
+    background: linear-gradient(45deg, #1cc88a, #13855c) !important;
+}
+
+.card.bg-info {
+    background: linear-gradient(45deg, #36b9cc, #258391) !important;
+}
+
+.table {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+footer {
+    border-top: 1px solid #e3e6f0;
+}
+
+/* Fix for dropdown menus to ensure they're not cut off */
+.dropdown-menu {
+    min-width: 12rem;
+    padding: 0.5rem 0;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+}
+
+/* Ensure tables have enough space for action dropdowns */
+.table-responsive {
+    overflow-x: auto;
+    min-height: 400px; /* Ensure enough height for dropdowns */
+}
+
+/* Custom copy button styles */
+.copy-btn {
+    cursor: pointer;
+    color: #6c757d;
+    transition: color 0.2s;
+}
+
+.copy-btn:hover {
+    color: #4e73df;
+}
+
+/* Toast notification styling */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1050;
+}
+
+.toast {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Field group styling */
+.field-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.field-group .form-control {
+    padding-right: 40px;
+}
+
+.field-group .copy-btn {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1rem;
+}
+
+/* Table cell with copy button */
+.copy-cell {
+    position: relative;
+    padding-right: 30px;
+}
+
+.copy-cell .copy-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Delete button styling */
+.btn-delete {
+    color: #dc3545;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    color: #c82333;
+}

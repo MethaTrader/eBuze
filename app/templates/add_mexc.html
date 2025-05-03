@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %} - Add MEXC Account{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Add New MEXC Account</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('main.add_mexc') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email_id" class="form-label">Email Account</label>
+                                {{ form.email_id(class="form-control", id="email_id") }}
+                                {% if form.email_id.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.email_id.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="referrer_id" class="form-label">Referrer (Optional)</label>
+                                {{ form.referrer_id(class="form-control", id="referrer_id") }}
+                                {% if form.referrer_id.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.referrer_id.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">Who invited this account (if any)</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="username" class="form-label">Username</label>
+                                <div class="input-group">
+                                    {{ form.username(class="form-control", id="username") }}
+                                    <button class="btn btn-outline-secondary" type="button" id="generate_username_btn">
+                                        <i class="fas fa-user"></i>
+                                    </button>
+                                </div>
+                                {% if form.username.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.username.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    {{ form.password(class="form-control", id="password") }}
+                                    <button class="btn btn-outline-secondary" type="button" id="generate_password_btn">
+                                        <i class="fas fa-key"></i>
+                                    </button>
+                                </div>
+                                {% if form.password.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.password.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="proxy" class="form-label">Proxy (Optional)</label>
+                        {{ form.proxy(class="form-control", id="proxy", placeholder="Format: ip:port:username:password") }}
+                        {% if form.proxy.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.proxy.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="notes" class="form-label">Notes (Optional)</label>
+                        {{ form.notes(class="form-control", id="notes", rows="3") }}
+                        {% if form.notes.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.notes.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-check mb-4">
+                        {{ form.volume_completed(class="form-check-input", id="volume_completed") }}
+                        <label class="form-check-label" for="volume_completed">
+                            $100 Volume Completed
+                        </label>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('main.mexc_list') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to List
+                        </a>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Password generation function
+    function generatePasswordCustom() {
+        const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const numbers = '0123456789';
+        const symbols = '!@#$%^&*()-_=+';
+        
+        const allChars = lowercase + uppercase + numbers + symbols;
+        
+        // Ensure at least one of each character type
+        let password = '';
+        password += lowercase.charAt(Math.floor(Math.random() * lowercase.length));
+        password += uppercase.charAt(Math.floor(Math.random() * uppercase.length));
+        password += numbers.charAt(Math.floor(Math.random() * numbers.length));
+        password += symbols.charAt(Math.floor(Math.random() * symbols.length));
+        
+        // Fill the rest of the password
+        for (let i = password.length; i < 12; i++) {
+            password += allChars.charAt(Math.floor(Math.random() * allChars.length));
+        }
+        
+        // Shuffle the password
+        password = password.split('').sort(() => 0.5 - Math.random()).join('');
+        
+        return password;
+    }
+    
+    // Username generation function
+    function generateUsernameCustom() {
+        const emailSelect = document.getElementById('email_id');
+        const emailOption = emailSelect.options[emailSelect.selectedIndex];
+        
+        if (emailOption && emailOption.text) {
+            const email = emailOption.text;
+            const emailParts = email.split('@');
+            
+            if (emailParts.length > 0) {
+                // Take the username part and remove special characters
+                let username = emailParts[0].replace(/[^a-zA-Z0-9]/g, '');
+                
+                // Add a random number to make it more unique
+                username += Math.floor(Math.random() * 1000);
+                
+                document.getElementById('username').value = username;
+            }
+        }
+    }
+    
+    // Generate password button
+    const generatePasswordBtn = document.getElementById('generate_password_btn');
+    if (generatePasswordBtn) {
+        generatePasswordBtn.addEventListener('click', function() {
+            document.getElementById('password').value = generatePasswordCustom();
+        });
+    }
+    
+    // Generate username button
+    const generateUsernameBtn = document.getElementById('generate_username_btn');
+    if (generateUsernameBtn) {
+        generateUsernameBtn.addEventListener('click', generateUsernameCustom);
+    }
+    
+    // Auto-generate username when email changes
+    const emailSelect = document.getElementById('email_id');
+    if (emailSelect) {
+        emailSelect.addEventListener('change', generateUsernameCustom);
+    }
+    
+    // Set default password on page load if empty
+    const passwordInput = document.getElementById('password');
+    if (passwordInput && passwordInput.value === '') {
+        passwordInput.value = generatePasswordCustom();
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %} - Add MEXC Account{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Add New MEXC Account</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('main.add_mexc') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email_id" class="form-label">Email Account</label>
+                                {{ form.email_id(class="form-control", id="email_id") }}
+                                {% if form.email_id.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.email_id.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="referrer_id" class="form-label">Referrer (Optional)</label>
+                                {{ form.referrer_id(class="form-control", id="referrer_id") }}
+                                {% if form.referrer_id.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.referrer_id.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">Who invited this account (if any)</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="username" class="form-label">Username</label>
+                                <div class="input-group">
+                                    {{ form.username(class="form-control", id="username") }}
+                                    <button class="btn btn-outline-secondary" type="button" id="generate_username_btn">
+                                        <i class="fas fa-user"></i>
+                                    </button>
+                                </div>
+                                {% if form.username.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.username.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    {{ form.password(class="form-control", id="password") }}
+                                    <button class="btn btn-outline-secondary" type="button" id="generate_password_btn">
+                                        <i class="fas fa-key"></i>
+                                    </button>
+                                </div>
+                                {% if form.password.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.password.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="proxy" class="form-label">Proxy (Optional)</label>
+                        {{ form.proxy(class="form-control", id="proxy", placeholder="Format: ip:port:username:password") }}
+                        {% if form.proxy.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.proxy.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <small class="form-text text-muted">
+                            Valid formats: host:port, host:port:login:password, login:password@host:port, [hostIPv6]:port:login:password<br>
+                            You can also specify protocol: http://192.168.0.1:8000, socks5://login:password@192.168.0.1:8000
+                        </small>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="referral_link" class="form-label">Referral Link (Optional)</label>
+                        {{ form.referral_link(class="form-control", id="referral_link", placeholder="Your MEXC referral link") }}
+                        {% if form.referral_link.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.referral_link.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="notes" class="form-label">Notes (Optional)</label>
+                        {{ form.notes(class="form-control", id="notes", rows="3") }}
+                        {% if form.notes.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.notes.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-check mb-4">
+                        {{ form.volume_completed(class="form-check-input", id="volume_completed") }}
+                        <label class="form-check-label" for="volume_completed">
+                            $100 Volume Completed
+                        </label>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('main.mexc_list') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to List
+                        </a>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ... (previous JavaScript code remains the same)
+});
+</script>
+{% endblock %}

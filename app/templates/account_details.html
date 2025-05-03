@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+
+{% block title %} - Account Details{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3">Account Details</h1>
+    <a href="{{ url_for('main.mexc_list') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-1"></i> Back to List
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">MEXC Account Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h4 class="h5">{{ account.username }}</h4>
+                    {% if account.volume_completed %}
+                    <span class="badge bg-success">Volume Completed</span>
+                    {% else %}
+                    <span class="badge bg-warning">Pending Volume</span>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Username</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ account.username }}" readonly>
+                        <button class="btn btn-outline-secondary" type="button" 
+                                onclick="copyToClipboard('{{ account.username }}', 'Username')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Password</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ account.password }}" id="password_field" readonly>
+                        <button class="btn btn-outline-secondary" type="button" 
+                                onclick="copyToClipboard('{{ account.password }}', 'Password')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Referral Link</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ account.referral_link }}" readonly>
+                        <button class="btn btn-outline-secondary" type="button" 
+                                onclick="copyToClipboard('{{ account.referral_link }}', 'Referral Link')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Created On</label>
+                    <p class="mb-0">{{ account.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                </div>
+                
+                {% if account.proxy %}
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Proxy</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ account.proxy }}" readonly>
+                        <button class="btn btn-outline-secondary" type="button" 
+                                onclick="copyToClipboard('{{ account.proxy }}', 'Proxy')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if account.notes %}
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Notes</label>
+                    <p class="mb-0">{{ account.notes }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card shadow mb-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Email Account</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h4 class="h5">{{ account.email_account.first_name }} {{ account.email_account.last_name }}</h4>
+                    <span class="badge bg-secondary">{{ account.email_account.country }}</span>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Email Address</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ account.email_account.email }}" readonly>
+                        <button class="btn btn-outline-secondary" type="button" 
+                                onclick="copyToClipboard('{{ account.email_account.email }}', 'Email')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Email Password</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ account.email_account.password }}" id="email_password_field" readonly>
+                        <button class="btn btn-outline-secondary" type="button" 
+                                onclick="copyToClipboard('{{ account.email_account.password }}', 'Email Password')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Full Name</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ account.email_account.first_name }} {{ account.email_account.last_name }}" readonly>
+                        <button class="btn btn-outline-secondary" type="button" 
+                                onclick="copyToClipboard('{{ account.email_account.first_name }} {{ account.email_account.last_name }}', 'Full Name')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-7">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-light">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Referral Information</h5>
+                    {% if account.referral_count < 5 %}
+                    <a href="{{ url_for('main.add_mexc') }}?referrer_id={{ account.id }}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-user-plus me-1"></i> Add Referral
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="referral-status mb-4">
+                    <h6>Referral Status: {{ account.referral_count }}/5</h6>
+                    <div class="progress" style="height: 25px;">
+                        <div class="progress-bar bg-info" role="progressbar" 
+                             style="width: {{ (account.referral_count / 5) * 100 }}%;" 
+                             aria-valuenow="{{ account.referral_count }}" aria-valuemin="0" aria-valuemax="5">
+                            {{ account.referral_count }}/5
+                        </div>
+                    </div>
+                </div>
+                
+                {% if referrer %}
+                <div class="referrer-info mb-4">
+                    <h6>Referred By</h6>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-1">{{ referrer.username }}</h5>
+                                    <p class="mb-0 text-muted">{{ referrer.email_account.email }}</p>
+                                </div>
+                                <a href="{{ url_for('main.account_details', account_id=referrer.id) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-info-circle me-1"></i> View
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+           
+                <div class="referrals-list">
+                    <h6>Referrals ({{ referrals|length }})</h6>
+                    {% if referrals %}
+                        <div class="list-group">
+                            {% for ref in referrals %}
+                            <div class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">{{ ref.username }}</h6>
+                                        <p class="mb-0 small">{{ ref.email_account.email }}</p>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        {% if ref.volume_completed %}
+                                        <span class="badge bg-success me-2">Volume Completed</span>
+                                        {% else %}
+                                        <span class="badge bg-warning me-2">Pending Volume</span>
+                                        {% endif %}
+                                        <a href="{{ url_for('main.account_details', account_id=ref.id) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <div class="mb-3">
+                                <i class="fas fa-users-slash fa-3x text-muted"></i>
+                            </div>
+                            <h6 class="text-muted">No referrals yet</h6>
+                            {% if account.referral_count < 5 %}
+                            <p class="text-muted mb-3">You can add up to 5 referrals</p>
+                            <a href="{{ url_for('main.add_mexc') }}?referrer_id={{ account.id }}" class="btn btn-primary">
+                                <i class="fas fa-user-plus me-1"></i> Add Referral
+                            </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Referral Tree</h5>
+            </div>
+            <div class="card-body">
+                <div id="referral-tree" style="width: 100%; height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tree structure for Treant.js
+    var referralChart = {
+        chart: {
+            container: "#referral-tree",
+            levelSeparation: 30,
+            siblingSeparation: 40,
+            nodeAlign: "BOTTOM",
+            connectors: {
+                type: "step",
+                style: {
+                    "stroke-width": 2,
+                    "stroke": "#ccc"
+                }
+            },
+            node: {
+                HTMLclass: "node"
+            }
+        },
+        
+        nodeStructure: {
+            text: {
+                name: "{{ account.username }}"
+            },
+            HTMLclass: "main-account",
+            {% if referrals %}
+            children: [
+                {% for ref in referrals %}
+                {
+                    text: {
+                        name: "{{ ref.username }}"
+                    },
+                    link: {
+                        href: "{{ url_for('main.account_details', account_id=ref.id) }}"
+                    },
+                    HTMLclass: "{% if ref.volume_completed %}completed{% else %}pending{% endif %}"
+                }{% if not loop.last %},{% endif %}
+                {% endfor %}
+            ]
+            {% endif %}
+        }
+    };
+
+    // Initialize the chart
+    new Treant(referralChart);
+});
+</script>
+
+<style>
+/* Custom styles for the tree nodes */
+.node {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.node.main-account {
+    background-color: #4e73df;
+    color: white;
+}
+
+.node.completed {
+    background-color: #1cc88a;
+    color: white;
+}
+
+.node.pending {
+    background-color: #f6c23e;
+    color: #212529;
+}
+</style>
+{% endblock %}

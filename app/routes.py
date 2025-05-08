@@ -20,17 +20,27 @@ def index():
     recent_emails = EmailAccount.query.order_by(EmailAccount.created_at.desc()).limit(5).all()
     recent_mexc = MexcAccount.query.order_by(MexcAccount.created_at.desc()).limit(5).all()
     
+    # Add the current year for the footer
+    now = datetime.now()
+    
     return render_template('index.html', 
                           email_count=email_count,
                           mexc_count=mexc_count,
                           available_for_referral=available_for_referral,
                           recent_emails=recent_emails,
-                          recent_mexc=recent_mexc)
+                          recent_mexc=recent_mexc,
+                          now=now)
+
+@main_bp.context_processor
+def inject_now():
+    """Make now variable available to all templates."""
+    return {'now': datetime.now()}
 
 @main_bp.route('/emails')
 def email_list():
     emails = EmailAccount.query.order_by(EmailAccount.created_at.desc()).all()
-    return render_template('emails.html', emails=emails)
+    now = datetime.now()
+    return render_template('emails.html', emails=emails, now=now)
 
 @main_bp.route('/add-email', methods=['GET', 'POST'])
 def add_email():
